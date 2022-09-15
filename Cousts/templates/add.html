@@ -1,0 +1,50 @@
+
+{% extends 'mymaster.html' %}
+
+{% block mymessage %}
+<div class="container">
+<h2>Add Cousts</h2>
+
+<form  action="addrecord/" method="post">
+    {% csrf_token %}
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <input class="form-control"  name="description">
+  </div>
+  <div class="mb-3">
+    <label for="Amount class="form-label">Amount</label>
+    <input class="form-control" name="amount" type="number" min="0" pattern="\d+" value="0">
+  </div>
+  <div class="mb-3">
+    <label for="Recipient" class="form-label">Recipient</label>
+    <input class="form-control" name="recipient">
+  </div>
+  <div class="mb-3">
+    <label for="Date " class="form-label">payTime</label>
+    <input type="text" id="pdpGregorian" />
+    <input type="hidden" id="restxt"  name="date" ><br>
+    <script>
+        $(function() {
+            $("#pdpGregorian").persianDatepicker({
+                formatDate: "YYYY-MM-DD",
+                onSelect: function() {
+                    $("#restxt").val($("#pdpGregorian").attr("data-gdate"));
+                }
+            });
+        });
+    </script>
+  </div>
+
+  <div class="mb-3">
+    <label for="categories" class="form-label">Categories</label>
+        <select name="categories" size="1" class="form-control">
+            {% for x in categories %}
+                <option>{{ x.category_name }}</option>
+            {% endfor %}
+        </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+{% endblock %}
