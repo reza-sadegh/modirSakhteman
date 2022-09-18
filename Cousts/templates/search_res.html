@@ -3,7 +3,7 @@
 
 {% block mymessage %}
     <div class="container">
-    <p><a href="/searchform" class="btn btn-primary">Search</a></p>
+    <p><a href="/search_form" class="btn btn-primary">Search</a></p>
 <p>  تعداد رکوردها : {{ cnt }}   </p>
 <p>جمع هزینه :<script>document.write(({{ sum.Amount__sum }}).toLocaleString("fa-IR"))</script></p>
 <table class="table table-hover table-striped table-bordered text-center" >
@@ -17,8 +17,7 @@
 <td>{{ x.Recipient }}</td>
 <td>{{ x.category_name }}</td>
 <td><script>document.write(new Date('{{ x.payTime |slugify }}').toLocaleString("fa-IR",{year: 'numeric',month: 'numeric', day:'numeric'}),);</script></td>
-<td><a href="/cousts/delete/{{ x.id }}" class="btn btn-danger">delete</a>
-<a href="/cousts/update/{{ x.id }}" class="btn btn-primary">UPDATE</a></td>
+<td><a href="/cousts/update/{{ x.id }}" class="btn btn-primary">ویرایش</a></td>
 </tr>
 {% endfor %}
 </table>

@@ -29,14 +29,16 @@ Hire Date : <br>
     </script>
 
 category : <br>
-    <select name="category" id="category">
+    <select name="category" id="cat">
         {% for x in categories %}
             <option value="{{ x.category_name }}">{{ x.category_name }}</option>
         {% endfor %}
     </select><br><br>
-<script>document.getElementById('skl').value = '{{ employee.skill }}';</script>
-
+    <script>document.getElementById('cat').value = '{{ coust.category_name }}';</script>
+    <a href="/cousts/" class="btn btn-secondary">Cancel</a>
+    <a href="/cousts/delete/{{ coust.id }}" class="btn btn-danger">delete</a>
     <input type="submit" value="Submit" class="btn btn-primary">
 </form>
+
 </div>
 {% endblock %}

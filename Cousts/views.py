@@ -16,17 +16,36 @@ class HomeView(TemplateView):
     extra_context = {'myname':'reza','rdate':nowt}
 
 @login_required(login_url='/accounts/login/')
-def cousts(request):
-  current_user = request.user
-  grps=request.user.groups.all()
-  if(current_user.groups.filter(name='manager').exists()):
-    cousts = Cousts.objects.all()
-    page_num = request.GET.get('page', 1)
-    paginator = Paginator(cousts, 3)
-    page_obj = paginator.page(page_num)
-    return render(request, 'cousts.html', {'page_obj': page_obj})
+def all_cousts(request):
+  # cousts = Cousts.objects.all().order_by('-payTime')
+  # page_num = request.GET.get('page', 1)
+  # paginator = Paginator(cousts, 3)
+  # page_obj = paginator.page(page_num)
+  # return render(request, 'all_cousts.html', {'page_obj': page_obj,'cnt':Cousts.objects.count,'sum':Cousts.objects.aggregate(Sum('Amount'))})
+  return redirect('/search_rep/?start_date=&end_date=&category=[ALL]&page=1')
+def search_min(request):
+  categories = Categories.objects.all()
+  return render(request,'search_min.html',{"categories":categories})
+
+def search_rep(request):
+
+  if (request.GET['start_date']): start_date = request.GET['start_date']
+  else: start_date=dt.datetime.strptime("2000-01-01", "%Y-%m-%d").date()
+
+  if (request.GET['end_date']): end_date = request.GET['end_date']
+  else: end_date=dt.datetime.strptime("2090-01-01", "%Y-%m-%d").date()
+
+  if (request.GET['category']=='[ALL]'):
+    cousts = Cousts.objects.filter(payTime__gte=start_date, payTime__lte=end_date).order_by('-payTime')
   else:
-    return redirect('/accounts/login/')
+    category = request.GET['category']
+    cousts = Cousts.objects.filter(payTime__gte=start_date, payTime__lte=end_date,category_name=category).order_by('-payTime')
+
+  # cousts = Cousts.objects.all()
+  page_num = request.GET.get('page', 1)
+  paginator = Paginator(cousts, 3)
+  page_obj = paginator.page(page_num)
+  return render(request, 'search_rep.html', {'page_obj': page_obj,'cnt':cousts.count,'sum':cousts.aggregate(Sum('Amount'))})
 
 def add(request):
   categories = Categories.objects.all()
@@ -79,6 +98,20 @@ def updaterecord(request, id):
   return HttpResponseRedirect(reverse('cousts'))
 
 @login_required(login_url='/accounts/login/')
+def cousts(request):
+  current_user = request.user
+  grps=request.user.groups.all()
+  if(current_user.groups.filter(name='manager').exists()):
+    # cousts = Cousts.objects.all()
+    # page_num = request.GET.get('page', 1)
+    # paginator = Paginator(cousts, 3)
+    # page_obj = paginator.page(page_num)
+    # return render(request, 'cousts.html', {'page_obj': page_obj})
+    return redirect('/search_res/?description=&recipient=&minamount=&maxamount=&start_date=&end_date=&category=[ALL]&page=1')
+  else:
+    return redirect('/accounts/login/')
+
+@login_required(login_url='/accounts/login/')
 def search_form(request):
   categories = Categories.objects.all()
   return render(request,'search_form.html',{"categories":categories})
@@ -113,36 +146,34 @@ def search_res(request):
   page_obj = paginator.page(page_num)
   return render(request, 'search_res.html', {'page_obj': page_obj, 'cnt':cousts.count, 'sum':cousts.aggregate(Sum('Amount'))})
 
-def search_min(request):
+def search_min_rep(request):
+
+  # if(request.method=='GET'):
   categories = Categories.objects.all()
-  return render(request,'search_min.html',{"categories":categories})
+  if ('startt_date' in request.GET and request.GET['start_date']): start_date = request.GET['start_date']
+  else: start_date = dt.datetime.strptime("2000-01-01", "%Y-%m-%d").date()
 
-def search_rep(request):
-
-  if (request.GET['start_date']): start_date = request.GET['start_date']
-  else: start_date=dt.datetime.strptime("2000-01-01", "%Y-%m-%d").date()
-
-  if (request.GET['end_date']): end_date = request.GET['end_date']
+  if ('end_date' in request.GET and request.GET['end_date']): end_date = request.GET['end_date']
   else: end_date=dt.datetime.strptime("2090-01-01", "%Y-%m-%d").date()
 
-  if (request.GET['category']=='[ALL]'):
-    cousts = Cousts.objects.filter(payTime__gte=start_date, payTime__lte=end_date)
+  if ('category'in request.GET ):category= request.GET['category']
+  else:category='[ALL]'
+  if (category=='[ALL]'):
+    cousts = Cousts.objects.filter(payTime__gte=start_date, payTime__lte=end_date).order_by('-payTime').order_by('-payTime')
   else:
-    category = request.GET['category']
-    cousts = Cousts.objects.filter(payTime__gte=start_date, payTime__lte=end_date,category_name=category)
+    cousts = Cousts.objects.filter(payTime__gte=start_date, payTime__lte=end_date,category_name=category).order_by('-payTime')
 
-  # cousts = Cousts.objects.all()
-  page_num = request.GET.get('page', 1)
-  paginator = Paginator(cousts, 3)
-  page_obj = paginator.page(page_num)
-  return render(request, 'search_rep.html', {'page_obj': page_obj,'cnt':cousts.count,'sum':cousts.aggregate(Sum('Amount'))})
-
-@login_required(login_url='/accounts/login/')
-def all_cousts(request):
-  cousts = Cousts.objects.all()
   page_num = request.GET.get('page', 1)
   paginator = Paginator(cousts, 3)
   page_obj = paginator.page(page_num)
 
-  return render(request, 'all_cousts.html', {'page_obj': page_obj,'cnt':Cousts.objects.count,'sum':Cousts.objects.aggregate(Sum('Amount'))})
+  return render(request, 'search_min_rep.html', {'page_obj': page_obj,'cnt':cousts.count,'sum':cousts.aggregate(Sum('Amount')),'categories':categories})
+
+
+
+
+
+
+
+
 
