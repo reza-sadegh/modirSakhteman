@@ -159,7 +159,7 @@ def search_min_rep(request):
   if ('category'in request.GET ):category= request.GET['category']
   else:category='[ALL]'
   if (category=='[ALL]'):
-    cousts = Cousts.objects.filter(payTime__gte=start_date, payTime__lte=end_date).order_by('-payTime').order_by('-payTime')
+    cousts = Cousts.objects.filter(payTime__gte=start_date, payTime__lte=end_date).order_by('-payTime')
   else:
     cousts = Cousts.objects.filter(payTime__gte=start_date, payTime__lte=end_date,category_name=category).order_by('-payTime')
 
