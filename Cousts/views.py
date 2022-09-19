@@ -150,7 +150,7 @@ def search_min_rep(request):
 
   # if(request.method=='GET'):
   categories = Categories.objects.all()
-  if ('startt_date' in request.GET and request.GET['start_date']): start_date = request.GET['start_date']
+  if ('start_date' in request.GET and request.GET['start_date']): start_date = request.GET['start_date']
   else: start_date = dt.datetime.strptime("2000-01-01", "%Y-%m-%d").date()
 
   if ('end_date' in request.GET and request.GET['end_date']): end_date = request.GET['end_date']
