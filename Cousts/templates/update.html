@@ -1,0 +1,43 @@
+{% extends 'mymaster.html' %}
+
+{% block mymessage %}
+    <div class="container">
+<h1>Update member</h1>
+
+<form action="updaterecord/{{ coust.id }}" method="post">
+{% csrf_token %}
+Description:<br><input name="description" value="{{ coust.Description }}"><br>
+Amount:<br><input name="amount" value="{{ coust.Amount }}" value="0" min="0" pattern="\d+"><br>
+Recipient : <br><input name="recipient" value="{{ coust.Recipient }}"><br>
+Hire Date : <br>
+    <input type="text" id="pdpGregorian"/>
+    <input type="hidden" id="restxt"  name="date" ><br>
+    <script>
+        a=new Date('{{coust.payTime |date:'Y/m/d'}}').toLocaleString("fa-IR",{year: 'numeric',month: 'numeric', day:'numeric'});
+        b=a.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+        $(function() {
+            $("#pdpGregorian").persianDatepicker({
+                formatDate: "YYYY-MM-DD",
+                selectedDate: b,
+                selectedBefore: !0,
+                onSelect: function() {
+                    $("#restxt").val($("#pdpGregorian").attr("data-gdate"));
+                }
+            });
+            $("#restxt").val('{{coust.payTime |date:'Y-m-d'}}');
+        });
+    </script>
+
+category : <br>
+    <select name="category" id="cat">
+        {% for x in categories %}
+            <option value="{{ x.category_name }}">{{ x.category_name }}</option>
+        {% endfor %}
+    </select><br><br>
+<script>document.getElementById('cat').value = '{{ coust.category_name }}';</script>
+    <a href="/cousts/" class="btn btn-secondary">Cancel</a>
+    <a href="/cousts/delete/{{ coust.id }}" class="btn btn-danger">delete</a>
+    <input type="submit" value="Submit" class="btn btn-primary">
+</form>
+</div>
+{% endblock %}

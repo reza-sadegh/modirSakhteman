@@ -1,0 +1,58 @@
+
+{% extends 'mymaster.html' %}
+
+{% block mymessage %}
+<div class="container">
+<h2>جستجوی هزینه</h2>
+
+<form  action="/search_rep/" method="GET">
+{#    {% csrf_token %}#}
+    <table>
+
+        <tr>
+            <td>Start Date :</td>
+            <td>
+                <input type="text" id="pdpGregorians" />
+                <input type="hidden" id="restxts"  name="start_date" ><br>
+                <script>
+                    $(function() {
+                        $("#pdpGregorians").persianDatepicker({
+                            formatDate: "YYYY-MM-DD",
+                            onSelect: function() {
+                                $("#restxts").val($("#pdpGregorians").attr("data-gdate"));
+                            }
+                        });
+                    });
+                </script>
+            </td>
+            <td>End Date :</td>
+            <td>
+                <input type="text" id="pdpGregoriane" />
+                <input type="hidden" id="restxte"  name="end_date" ><br>
+                <script>
+                    $(function() {
+                        $("#pdpGregoriane").persianDatepicker({
+                            formatDate: "YYYY-MM-DD",
+                            onSelect: function() {
+                                $("#restxte").val($("#pdpGregoriane").attr("data-gdate"));
+                            }
+                        });
+                    });
+                </script>
+            </td>
+            <td>Category :</td>
+            <td>
+                <select name="category" size="1" >
+                        <option>[ALL]</option>
+                    {% for x in categories %}
+                        <option>{{ x.category_name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td><button type="submit" class="btn btn-primary">جستجو</button></td>
+        </tr>
+    </table>
+
+</form>
+
+{% endblock %}

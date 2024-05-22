@@ -1,0 +1,41 @@
+{% extends 'mymaster.html' %}
+
+{% block mymessage %}
+    <h1>salam {{ myname }}</h1>
+
+    <div style="margin: 30px;">
+        <input type="text" id="pdpGregorian" /><br><br>
+        <input type="text" id="restxt"><br>
+        <input type="button" value="ok" id="btn" />
+    </div>
+    <script>
+        a=new Date('{{rdate |date:'Y/m/d'}}').toLocaleString("fa-IR",{year: 'numeric',month: 'numeric', day:'numeric'});
+        b=a.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+        $(function() {
+            $("#pdpGregorian").persianDatepicker({
+                formatDate: "YYYY-MM-DD",
+                selectedDate: b,
+                selectedBefore: !0,
+                onSelect: function() {
+                    $("#restxt").val($("#pdpGregorian").attr("data-gdate"));
+                }
+            });
+            $("#restxt").val('{{rdate |date:'Y-m-d'}}');
+        });
+        $("#btn").click(function() {
+            alert($("#restxt").val());
+        });
+    </script>
+
+
+<script>
+
+    a=new Date('{{rdate |date:'Y/m/d'}}').toLocaleString("fa-IR",{year: 'numeric',month: 'numeric', day:'numeric'});
+    document.write(a+'<br>');
+    b=a.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+    document.write(b);
+</script>
+
+<p>{{ rdate }}</p>
+<p><a href="searchmin/" class="btn btn-primary">Search</a></p>
+{% endblock %}

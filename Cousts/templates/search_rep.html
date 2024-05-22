@@ -1,0 +1,42 @@
+
+{% extends 'mymaster.html' %}
+
+{% block mymessage %}
+    <div class="container">
+<p><a href="/search_min" class="btn btn-primary">جستجو</a></p>
+<p>  تعداد رکوردها : {{ cnt }}   </p>
+<p>جمع هزینه :<script>document.write(({{ sum.Amount__sum }}).toLocaleString("fa-IR"))</script></p>
+<table class="table table-hover table-striped table-bordered text-center" >
+<thead class="table-dark">
+<tr><th>ID</th><th>عنوان هزینه</th><th>مبلغ</th><th>دریافت کننده</th><th>سرفصل هزینه</th><th>زمان پرداخت</th></tr></thead>
+{% for x in page_obj  %}
+<tr>
+<td>{{ x.id }}</td>
+<td> {{ x.Description }}</td>
+<td><script>document.write(({{ x.Amount }}).toLocaleString("fa-IR"));</script></td>
+<td>{{ x.Recipient }}</td>
+<td>{{ x.category_name }}</td>
+<td><script>document.write(new Date('{{ x.payTime |slugify }}').toLocaleString("fa-IR",{year: 'numeric',month: 'numeric', day:'numeric'}),);</script></td>
+
+</tr>
+{% endfor %}
+</table>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="{{ request.get_full_path }}&page=1" class="btn btn-primary">&laquo; first</a>
+            <a href="{{ request.get_full_path }}&page={{ page_obj.previous_page_number }}" class="btn btn-primary">previous</a>
+        {% endif %}
+
+        <span >
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="{{ request.get_full_path }}&page={{ page_obj.next_page_number }}" class="btn btn-primary">next</a>
+            <a href="{{ request.get_full_path }}&page={{ page_obj.paginator.num_pages }}" class="btn btn-primary">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+    </div>
+{% endblock %}

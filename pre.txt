@@ -1,0 +1,43 @@
+sudo apt install python3-pip -y
+pip install --upgrade pip
+pip freeze requirements.txt
+pip3 install -r requirements.txt
+source .venv/bin/activate
+---------------------------------------------
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py createsuperuser
+python3 manage.py collectstatic
+---------------------------------------------
+python3 manage.py runserver 0:8000
+---------------------------------------------
+version: "3.8"
+services:
+  db:
+    container_name: postgres_container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: SAKHTEMAN
+    ports:
+      - "5432:5432"
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.admin
+      PGADMIN_DEFAULT_PASSWORD: 123
+    ports:
+      - "5050:80"
+------------------------------------
+docker-compose up -d
+-------------------------------------
+root@1dd49b98d3d8:/# psql -U postgres
+postgres=# \l     <========= List of databases
+postgres=# \du    <========= List of roles (users)
+postgres=# CREATE DATABASE modirSakhteman;
+postgres=# \c modirSakhteman
+modirSakhteman=# \dt
