@@ -1,11 +1,14 @@
 sudo apt install python3-pip -y
 pip3 install --upgrade pip
-pip freeze requirements.txt
-pip3 install -r requirements.txt
+---------------------------------
 apt install python3-venv
-pip install virtualenv
+python3 -m pip install virtualenv
+python3 -m venv .venv
+pip3 install virtualenv
 virtualenv -p python3 .venv
 source .venv/bin/activate
+pip3 install -r requirements.txt
+pip freeze requirements.txt
 ---------------------------------------------
 python3 manage.py makemigrations
 python3 manage.py migrate
@@ -44,3 +47,17 @@ postgres=# \du    <========= List of roles (users)
 postgres=# CREATE DATABASE modirSakhteman;
 postgres=# \c modirSakhteman
 modirSakhteman=# \dt
+-------------------------------------------------------------------------------
+pip install pyOpenSSL
+pip install django-extensions Werkzeug
+nano ~/PycharmProjects/modirSakhteman/modirSakhteman/settings.py
+#########################################
+NSTALLED_APPS = [
+    # other apps
+    'django_extensions',
+]
+########################################
+openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj "/C=IR/ST=TH/L=TH/O=TCT/OU=TMN/CN=home.local" -keyout cert.key  -out cert.crt
+python3 manage.py runserver_plus 0:8000 --cert-file cert.crt --key-file cert.key
+------------------------------
+git clone --branch <branchname> <remote-repo-url>

@@ -1,7 +1,14 @@
 asgiref==3.7.2
+cffi==1.16.0
+cryptography==42.0.7
 Django==5.0.6
+django-extensions==3.2.3
+MarkupSafe==2.1.5
 packaging==23.1
 psycopg2-binary==2.9.7
+pycparser==2.22
+pyOpenSSL==24.1.0
 sqlparse==0.4.4
 typing_extensions==4.7.1
 tzdata==2024.1
+Werkzeug==3.0.3
