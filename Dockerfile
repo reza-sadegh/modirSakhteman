@@ -1,8 +1,5 @@
 FROM python
 
-# RUN apt-get update && apt-get install -y python3.10 python3.10-dev
-# ENV PYTHONDONTWRITEBYTECODE 1
-# ENV PYTHONUNBUFFERED 1
 
 WORKDIR /modirSakhteman
 RUN pip3 install --upgrade pip 
